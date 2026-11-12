@@ -1,0 +1,103 @@
+sudo apt update
+sudo apt install bison flex
+sudo apt  install cmake  # version 3.22.1-1ubuntu1.22.04.2
+sudo apt install libglib2.0-dev
+sudo apt install mono-devel
+cmake ..
+make
+./facile ../essai1.facile
+./facile ../essai1.facile
+ilasm source.il
+ilasm essai1.il
+chmod 755 essai1.exe
+./essai1.exe
+
+#################
+
+creer dossier exo 1 
+creer fichiers cmakelist
+ # file: CMakeLists.txt
+ # version: 0.1.0
+ cmake_minimum_required(VERSION 3.0)
+ project(facile VERSION 0.1.0 LANGUAGES C)
+ # Search for the flex cmake package
+ find_package(FLEX)
+ # Definition of a scanner
+ flex_target(
+ FACILE_SCANNER
+ facile.lex
+ "${CMAKE_CURRENT_BINARY_DIR}/facile.lex.c"
+ )
+ # Creation of the "facile" executable
+ add_executable(facile ${FLEX_FACILE_SCANNER_OUTPUTS})
+ # Add flex library to the "facile" executable
+ target_link_libraries(facile fl)
+ # Add zip generator
+ set(CPACK_SOURCE_GENERATOR "ZIP")
+ set(CPACK_SOURCE_IGNORE_FILES "build;~$;${CPACK_SOURCE_IGNORE_FILES}")
+ set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+ set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+ set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+ include(CPack)
+********
+creer fichier facile.lex 
+%{
+#include <assert.h>
+#define TOK_IF    258
+#define TOK_THEN  259
+#define TOK_ELSE  260
+#define TOK_WHILE 261
+#define TOK_END   262
+%}
+
+%%
+
+if    { assert(printf("'if' found")); return TOK_IF; }
+then  { assert(printf("'then' found")); return TOK_THEN; }
+else  { assert(printf("'else' found")); return TOK_ELSE; }
+while { assert(printf("'while' found")); return TOK_WHILE; }
+end   { assert(printf("'end' found")); return TOK_END; }
+[ab]*a[ab]*b[ab]*b[ab]*a  assert(printf("'abba' found")); return yytext[0];
+
+%%
+
+/*
+ * file: facile.lex
+ * version: 0.2.0
+ */
+*********
+apres 
+mkdir build
+cd build 
+cmake -DCMAKE_BUILD_TYPE=Debug .. 
+make 
+./facile 
+on ecris if ou autre 
+
+
+les commande 
+./build/facile test.facile
+
+./build/facile test_elsif.facile
+ls -1
+cat test_elsif.il
+ilasm test_elsif.il
+chmod 755 test_elsif.exe
+./test_elsif.exe
+
+
+
+// si ca ne veut pas marcher 
+cd ~/Documents/Projet_Compil/exo1
+rm -f CMakeCache.txt cmake_install.cmake CPackConfig.cmake CPackSourceConfig.cmake Makefile
+cd ~/Documents/Projet_Compil/exo1/build
+rm -rf *  # Nettoie build pour repartir de zéro
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+cd ..
+./build/facile test_elsif.facile
+ls -1
+cat test_elsif.il
+ilasm test_elsif.il
+chmod 755 test_elsif.exe
+./test_elsif.exe

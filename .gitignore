@@ -1,0 +1,14 @@
+build/
+build (1)/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CPackConfig.cmake
+CPackSourceConfig.cmake
+Makefile
+*.lex.c
+*.y.c
+*.y.h
+*.il
+*.exe
+/exo1/facile

@@ -1,0 +1,8 @@
+read x;
+read y;
+if x = 5 then
+  print 42;
+elseif x < 10 then
+  print x;
+else
+  read y;

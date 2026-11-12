@@ -1,0 +1,3 @@
+read a;
+read b;
+if a > b then print a;
